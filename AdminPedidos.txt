@@ -1,0 +1,23 @@
+Product
+ORDERBY(SELECT(Products[ProductID], [Stock]>=1), [Description])
+
+Quantity
+[Quantity]<=[Product].[Stock]
+
+Products
+TEXT(
+   SELECT
+   (Products[Description], IN
+       (
+          [ProductID],
+          (SELECT(OrderDetails[Product], [_THISROW].[OrderID] = [OrderID]))
+       )
+    )
+)
+
+DeliveryDate
+[DeliveryDate]>=TODAY()
+TODAY()+3
+
+RULEOHPending
+IN([MovementDescription], {"P", "PP"})
