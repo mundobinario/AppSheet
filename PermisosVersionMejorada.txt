@@ -1,0 +1,28 @@
+Show if
+AND
+(
+    LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserActive") = "TRUE"
+    ,IN(LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserRole"), { "ADMIN", "SALES" })
+)
+
+
+Are updates allowed?
+SWITCH(LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserRole"), 
+  "ADMIN", "ALL_CHANGES", 
+  "READ_ONLY")
+
+
+UserID(Initial Value)
+LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserID")
+
+
+SalesByPerson(SLICE)
+OR
+(
+    [UserID] = LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserID")
+    ,AND
+    (
+       LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserActive") = "TRUE"
+       ,IN(LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserRole"), { "ADMIN"})
+    )
+)
