@@ -1,0 +1,40 @@
+AlumnoInasistencias:
+COUNT(
+      SELECT
+      (
+            Asistencia[AlumnoNombre]
+            ,AND
+            (
+                [AsistenciaPresente] = FALSE
+               ,[_THISROW].[AlumnoNombre]=[AlumnoNombre] 
+            )
+      )
+)
+
+SLICEAlumnosConInasistencia:
+[AlumnoInasistencias] > 0
+
+SLICEAsistencia
+COUNT(SELECT
+(      Asistencia[AlumnoNombre], 
+       AND
+       (
+            DATE([AsistenciaFecha]) = TODAY()
+            ,[_THISROW].[AlumnoNombre] = [AlumnoNombre]
+            
+       )
+)) = 0
+
+SLICEInasistencias
+[AsistenciaPresente]=FALSE
+
+NoAsistio:
+CONCATENATE("¿Seguro no ha asistido ", [AlumnoNombre],"?")
+
+ACTIONNoAsisto:
+INPUT("AsistenciaComentario", TEXT(""))
+[AsistenciaPresente] = TRUE
+
+ACTIONSiAsistio:
+INPUT("AsistenciaComentario", TEXT(""))
+[AsistenciaPresente]=FALSE
