@@ -1,0 +1,34 @@
+Valid If
+SELECT
+(
+     Discounts[DiscountID]
+     ,AND
+      ( 
+        [DiscountDateStart]<=TODAY()
+        ,[DiscountDateEnd]>=TODAY()
+        ,COUNT([Related OrderDetails])>=1
+      ) 
+)
+
+TotalDiscountVirtual
+SUM(
+ SELECT
+ (
+     Discounts[DiscountValue]
+     ,IN([DiscountID], [_THISROW].[DiscountID])
+  )
+)
+
+
+Calcular descuento
+(
+ SUM
+ (
+     SELECT
+     ( 
+          OrderDetails[Amount]
+          ,[_THISROW].[OrderID] = [OrderID]
+     )
+  )
+  * [TotalDiscountVirtual]
+) / 100
