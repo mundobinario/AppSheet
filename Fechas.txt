@@ -1,0 +1,21 @@
+Obtener días transcurridos
+TOTALHOURS([RutaFechaFin]-[RutaFechaInicio])/24
+
+WORKDAY
+WORKDAY(TODAY(), 1 , {"11/24/2022"})
+WORKDAY(DATE([RutaFechaInicio]), 1 )
+
+Mes
+INDEX(
+  LIST(
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ),
+  MONTH()
+)
+
+Fórmula para SLICE
+MONTH([UsuarioFechaNacimiento]) = MONTH(TODAY())
+
+Edad
+(TOTALHOURS(TODAY()-[AlumnoFechaNacimiento])/24)/365
