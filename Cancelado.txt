@@ -1,0 +1,12 @@
+SUM
+(
+   SELECT
+   (
+      OrderDetails[Quantity],
+      AND
+      (
+         [Product] = [_THISROW].[ProductID]
+         ,[OrderID].[Status] <> "CANCELADO"
+       )
+   )
+)
