@@ -1,0 +1,33 @@
+ProductOrders
+SUM
+(
+     SELECT(OrderDetails[Quantity]
+    ,[product] = [_THISROW].[ProductID])
+)
+
+ProductProduction
+SUM
+(
+     SELECT(Production[Quantity]
+    ,[ProductID] = [_THISROW].[ProductID])
+)
+
+
+ProductStockAvailable
+SUM
+(
+   SELECT
+   (
+      Production[Quantity]
+      ,[ProductID] = [_THISROW].[ProductID]
+   )
+)
+-
+SUM
+(
+   SELECT
+   (
+      OrderDetails[Quantity]
+      ,[Product] = [_THISROW].[ProductID]
+   )
+)
