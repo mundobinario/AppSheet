@@ -1,0 +1,60 @@
+const url = "https://pokeapi.co/api/v2/pokemon/"
+
+function nombrePokemon(pokemon) {
+  const urlPoke = url+pokemon
+  const res = UrlFetchApp.fetch(urlPoke)
+  const dataAsText = res.getContentText()
+  const data = JSON.parse(dataAsText)
+  //console.log(data)
+
+  var name = data.species.name
+  var image = data.sprites.front_default
+
+  return name
+ 
+}
+
+function imagenPokemon(pokemon) {
+  const urlPoke = url+pokemon
+  const res = UrlFetchApp.fetch(urlPoke)
+  const dataAsText = res.getContentText()
+  const data = JSON.parse(dataAsText)
+  //console.log(data)
+
+  var name = data.species.name
+  var image = data.sprites.front_default
+
+  return image
+ 
+}
+
+
+
+function opPokemon(pokemon, opcion) {
+  const urlPoke = url+pokemon
+  const res = UrlFetchApp.fetch(urlPoke)
+  const dataAsText = res.getContentText()
+  const data = JSON.parse(dataAsText)
+  //console.log(data)
+
+  var resultado = ""
+
+  switch (opcion)
+    {
+        case "nombre":
+            resultado = data.species.name
+            break
+        case "imagen":
+            resultado = data.sprites.front_default
+            break
+        case "peso":
+            resultado = data.weight
+            break
+        default:
+            break
+    }
+
+  return resultado
+ 
+}
+
