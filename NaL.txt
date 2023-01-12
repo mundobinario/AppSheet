@@ -1,0 +1,15 @@
+const url = "https://nal.azurewebsites.net/api/NAL?num="
+
+function fnNaL(numero) {
+  const num = numero.toString().replace('$', '')
+  const urlNaL= url+num
+  const res = UrlFetchApp.fetch(urlNaL)
+  const dataAsText = res.getContentText()
+  const data = JSON.parse(dataAsText)
+
+  var texto = data.letras
+  //var texto=num
+
+  return texto
+ 
+}
