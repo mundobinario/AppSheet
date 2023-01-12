@@ -1,0 +1,5 @@
+ShelfDays
+[Date]+[ProductID].[ExpirationDay]
+
+
+TOTALHOURS([ShelfDays]-TODAY())/24
