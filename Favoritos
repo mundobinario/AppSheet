@@ -1,0 +1,10 @@
+CustomerCount
+IF
+(
+   [CustomerPriority]="⭐"
+   ,100000
+   ,COUNT(SELECT(OrderHeader[OrderID], [CustomerID] = [_THISROW].[CustomerID]))
+)
+
+CustomerID en OrderHeader (Valid If)
+ORDERBY(Customers[CustomerID], [CustomerID].[CustomerCount], TRUE)
