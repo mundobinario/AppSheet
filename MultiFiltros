@@ -1,0 +1,23 @@
+FilterSeller
+SELECT(Users[UserName], [UserRole] = "SALES")
+
+FilterConcepts
+SELECT(FinancialMovements[MovementDescription], TRUE)
+
+TotalNet
+SUM
+(
+    SELECT
+    (    OrderHeader[TotalNetVirtual]
+        ,AND
+        (
+          [OrderDate] >= [FromDate]
+          ,[OrderDate] <= [ToDate]
+          ,IN([UserID].[UserName], [FilterSellers])
+          ,IN([MovementDescription].[MovementDescription], [FilterConcepts])    
+         ) 
+     )
+)
+
+PDF
+<<Start:SELECT(OrderHeader[OrderID], AND([OrderDate] >= [FromDate],[OrderDate] <= [ToDate], IN([UserID].[UserName], [FilterSellers]), IN([MovementDescription].[MovementDescription], [FilterConcepts])    ) )>> <<[OrderDate]>>
