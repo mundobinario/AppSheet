@@ -1,0 +1,36 @@
+Columna Product en OrderDetails (ValidIf)
+ORDERBY
+(
+   SELECT
+   (
+       Products[ProductID], 
+       AND
+       (
+          [Stock]>=1
+          ,NOT
+          (
+             IN
+             ([ProductID],
+               SELECT
+               (
+                  OrderDetails[Product] 
+                  ,[OrderID] = [_THISROW].[OrderID]
+                ) 
+              ) 
+           )
+        ) 
+   ),[Description]
+)
+
+
+ProductCounter (Virtual Column)
+COUNT(
+  FILTER(
+    "OrderDetails",
+    [OrderID] = [_THISROW].[OrderID]
+  )
+)
+
+
+Columna OrderID en OrderDetails (Valid IF)
+[OrderID].[ProductCounter] < 3
