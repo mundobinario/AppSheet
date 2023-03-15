@@ -1,0 +1,29 @@
+BOTOrderDetailsDelete
+COUNT
+(
+    SELECT
+    (
+         OrderDetails[OrderDetailID]
+         ,AND
+         (
+              [OrderID] = [_THISROW].[OrderID]
+              ,[Product] = [_THISROW].[Product])
+         )
+) > 1
+
+
+
+BOTOrderDetailsDuplicated
+SELECT(
+OrderDetails[OrderDetailID], AND([OrderID] = [_THISROW].[OrderID], [Product] = [_THISROW].[Product]))
+
+
+ACTIONDuplicatedProducts
+SUM
+(
+    SELECT
+    (
+       OrderDetails[Quantity], AND([OrderID] = [_THISROW].[OrderID], [Product] = [_THISROW].[Product])
+    )
+)
+
