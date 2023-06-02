@@ -1,0 +1,11 @@
+OCFecha
+CONCATENATE(LEFT([Escaneo], 2), "/", MID([Escaneo], 3,2), "/", MID([Escaneo], 5,4))
+
+OC
+CONCATENATE(MID([Escaneo], 9,6))
+
+OCProducto
+SUBSTITUTE(TEXT(NUMBER(CONCATENATE(MID([Escaneo], 15,6)))), ",", "")
+
+OCCantidad
+NUMBER(TEXT(RIGHT([Escaneo],4)))

@@ -1,0 +1,23 @@
+CONCATENATE([ShortcutView], "(", [ShipmentCounter],")")
+
+ShortcutNameVirtual
+SWITCH
+(
+    [ShortcutView]
+    ,"Shipments", CONCATENATE([ShortcutView], "(", [ShipmentCounter],")")
+    ,"Production", CONCATENATE([ShortcutView], "(", [ProductionCounter],")")
+    ,[ShortcutView]
+)
+
+ShipmentCounter
+COUNT(SELECT(Shipments[ShipmentID], TRUE))
+
+
+ProductionCounter
+COUNT(SELECT(Production[ProductionID], TRUE))
+
+
+Salsitas
+CONCATENATE("Salsitas", "(", COUNT(SELECT(Products[ProductID], TRUE)) ,")")
+
+CONCATENATE("Salsitas", "(", COUNT(SELECT(Products[ProductID], [Status] = TRUE)) ,")")
