@@ -1,0 +1,13 @@
+File Folder Path
+CONCATENATE("/appsheet/data/MBProyectos-5689478/Facturas")
+
+
+FacturaFolioVirtual
+ANY
+(
+   SELECT
+   (
+     FacturasPDF_parent[Invoice Number]
+     ,[File] = SUBSTITUTE([_THISROW].[PDF], "/appsheet/data/MBProyectos-5689478/Facturas/", "")
+   )
+)
