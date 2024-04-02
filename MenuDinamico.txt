@@ -1,0 +1,10 @@
+Anterior
+IN
+([ShortcutID], 
+     SELECT(ShortcutRoles[ShortcutID], [UserRole] =
+     LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserRole")) 
+)
+
+
+Nueva
+IN(LOOKUP(USEREMAIL(), "Users", "UserEmail", "UserRole"), [UserRole])
