@@ -1,0 +1,43 @@
+Enum para obtener años de manera dinámica
+LIST(YEAR(TODAY())-1, YEAR(TODAY()), YEAR(TODAY())+1)
+
+Original
+SELECT
+(
+      OrderHeader[OrderID]
+      ,AND
+      ( 
+            [OrderDate] >= [FromDate]
+            ,[OrderDate] <= [ToDate]
+            ,IN([UserID].[UserName], [FilterSellers])
+            ,IN([MovementDescription].[MovementDescription], [FilterConcepts])
+      )
+)
+
+
+
+
+Nueva
+SELECT
+(
+      OrderHeader[OrderID]
+      ,AND
+      (
+          [FilterYear] = NUMBER([OrderHeaderYear])
+          ,SWITCH(
+             [FilterPeriod],
+             "Mensual", [FilterMonth] = [Period],
+             "Bimestral", IN([Period], {"Enero", "Febrero"}),
+             "Trimestral", IN([Period], {"Enero", "Febrero", "Marzo"}),
+             "Semestral", IN([Period], {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio"}),
+             "Anual", [FilterYear] = NUMBER([OrderHeaderYear]),
+             [FilterYear] = TEXT([OrderHeaderYear])              
+          )
+          ,IN([UserID].[UserName], [FilterSellers])
+          ,IN([MovementDescription].[MovementDescription], [FilterConcepts])    
+         ) 
+)
+
+Agregar columna Virtual en OrderHeader
+OrderHeaderYear
+YEAR([OrderDate])
