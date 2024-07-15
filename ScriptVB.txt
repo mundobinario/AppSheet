@@ -1,0 +1,15 @@
+function doGet(e) {
+  var ss = SpreadsheetApp.openById('1fBKOfnbiA3o5ZpmMh3VvHYIFEDEg4f9bjXkWFJmTbEA'); // Reemplaza con el ID de tu hoja
+  var hoja = ss.getSheetByName('Clientes'); // Reemplaza con el nombre de tu hoja
+    var ultimaFila = hoja.getRange("A:D").getValues().filter(String).length;
+  var datos = hoja.getRange('A1:D' + ultimaFila).getValues(); // Reemplaza con el rango que desees consultar
+  
+  // Construir una respuesta en formato JSON
+  var response = {
+    status: "success",
+    data: datos
+  };
+  
+  return ContentService.createTextOutput(JSON.stringify(response))
+    .setMimeType(ContentService.MimeType.JSON);
+}
