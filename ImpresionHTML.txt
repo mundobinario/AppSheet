@@ -1,0 +1,193 @@
+Codigo.gc
+function doGet(e) {
+
+  htmltemplate = HtmlService.createTemplateFromFile('Factura3.0');
+
+  var fechaImpresion = e.parameter.fechaImpresion || '';
+  var factura = e.parameter.factura || '';
+  var fecha = e.parameter.fecha || '';
+  var proveedor = e.parameter.proveedor || '';
+  var monto = e.parameter.monto || '';
+  var diasCredito = e.parameter.diasCredito || '';
+  var comentarios = e.parameter.comentarios || '';
+  var pago = e.parameter.pago || '';
+  var proveedorNombre = e.parameter.proveedorNombre || '';
+
+
+  
+
+  htmltemplate.fechaImpresion = fechaImpresion;
+  htmltemplate.factura = factura;
+  htmltemplate.fecha = fecha;
+  htmltemplate.proveedor = proveedor;
+  htmltemplate.monto = monto;
+  htmltemplate.diasCredito = diasCredito;
+  htmltemplate.comentarios = comentarios;
+  htmltemplate.pago = pago;
+  htmltemplate.proveedorNombre = proveedorNombre;
+
+ 
+  return htmltemplate.evaluate();
+}
+
+Factura3.0.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprobante de Recepción de Factura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 80px;
+            width: 280px;
+            margin: 10px;
+            padding: 0;
+            border: 0px solid #000;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            width: 400px; /* Ajusta el ancho según sea necesario */
+            margin: 10px 10px;
+            font-family: Arial, sans-serif;
+        }
+        .logo {
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
+        .logo img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        .text {
+            flex: 1 1 auto;
+        }
+        .text p {
+            margin: 0;
+        }
+        .text strong {
+            font-size: 1.2em;
+        }
+        .details p {
+            margin: 0;
+        .title {
+            background-color: #009FE3;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 3px;
+            font-weight: bold;
+            margin: 2mm 0;
+            text-align: center;
+            
+        }
+        .details span, .comments span, .signature span {
+            display: block;
+            font-weight: bold;
+        }
+        .signature {
+            text-align: center;
+        }
+        .signature-line {
+            margin-top: 30mm;
+            border-top: 1px solid #000;
+            width: 100mm;
+            margin: 0 auto;
+        }
+        .footer p {
+            font-size: 12px;
+            text-align: center;
+            margin: 0px 0;
+        }
+        .footer a {
+            color: #0000EE;
+        }
+
+
+    </style>
+</head>
+<body> 
+        <div class="container">
+        <div class="logo">
+            <img style="width: 70px;" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjEQ4ARqQGyxZYR91oZPA2upaXhvbDhJd-l_fZkHhQ3Iuh8_ywqB-f7tGN5bWFve2p0tD_cBb1rTjDHOyY7bg7EESWxr5cZ89ImhGP7RsfuvgSoJdFX3ntDU0Q3AXgpganq4_hOw3DwtaqOU6KeVx3xLX6TVHcQVrLEliSQGaQY4aKtzYsOItYI9FWxk3U/w404-h404/Logo.png" alt="Logo">
+        </div>
+        <div class="text">
+            <p><strong>MUNDO BINARIO</strong></p>
+            <p>Tech content channel</p>
+            <p>www.mundobinario.com.mx</p>
+            <p>México</p>
+        </div>
+        </div>
+        </br>
+        <div style="background-color: #00a0f0;  padding: 5px;">
+        <div style="text-align: center; font-weight: bold;">COMPROBANTE DE RECEPCIÓN</div>
+        <div style="text-align: center; font-weight: bold;">DE FACTURA</div>
+        </div>
+        <p style="text-align: right;" id=fechaImpresion></p>
+        <div class="details">
+            <p id=factura></p>
+            <p id=fecha></p>
+            <p id=proveedor></p>
+            <p style="font-weight: bold;" id=monto></p>
+            <p id=diasCredito></p>
+        <div class="details">
+        <div class="comments">
+            </br>
+            <p id=comentarios></p> 
+            <p id=pago></p> 
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+        </div>
+        <div class="signature">
+            <p>____________________</p>
+            <span>NOMBRE Y FIRMA</span>
+            <p id=proveedorNombre></p>
+            <div class="signature-line"></div>
+        </div>
+        <div class="footer">
+            </br>
+            <p>Conoce nuestro aviso de privacidad en</p>
+            <p><a href="http://www.mundobinario.com.mx">www.mundobinario.com.mx</a> si tienes alguna duda o sugerencia por favor escribe a <a href="mailto:hola@mundobinario.com.mx">hola@mundobinario.com.mx</a></p>
+            </br>
+            </br>
+            <p style="text-align: center;">APRENDE, APLICA, REPLICA.</p>
+        </div>
+
+    <script>
+      document.getElementById("fechaImpresion").innerHTML="<?= fechaImpresion ?>";
+      document.getElementById("factura").innerHTML="<?= factura ?>";
+      document.getElementById("fecha").innerHTML="<?= fecha ?>";
+      document.getElementById("proveedor").innerHTML="<?= proveedor ?>";
+      document.getElementById("monto").innerHTML="<?= monto ?>";
+      document.getElementById("diasCredito").innerHTML="<?= diasCredito ?>";
+      document.getElementById("comentarios").innerHTML="<?= comentarios ?>";
+      document.getElementById("pago").innerHTML="<?= pago ?>";
+      document.getElementById("proveedorNombre").innerHTML="<?= proveedorNombre ?>";
+    </script>
+
+    <script>
+      window.onload = function(){
+        window.print();
+      }
+    </script>
+
+</body>
+</html>
+
+
+ACTIONImprimirHTML
+"https://script.google.com/macros/s/AKfycbzePgCPfzfj1Ywh_M94OYuAm2k9GreC1SGZ1TxbTk5M17hO7Afjh_wb8YUE7vzSkDV5FQ/exec" 
+& "?fechaImpresion=" & encodeurl([ImpresionFecha]) 
+& "&factura=Factura:" & encodeurl([FacturaNo])
+& "&fecha=Fecha:" & encodeurl([FacturaFecha])
+& "&proveedor=Proveedor: " & encodeurl([ProveedorID].[ProveedorNombre])
+& "&monto=Monto: $ " & encodeurl([FacturaMonto])
+& "&diasCredito=Días de crédito " & encodeurl([FacturaCredito])
+& "&comentario=Comentarios:" & encodeurl([FacturaComentarios])
+& "&pago=Tu vas a recibir el pago: " & encodeurl([FacturaFechaPago])
+& "&proveedorNombre=" & encodeurl([ProveedorID].[ProveedorNombre])
