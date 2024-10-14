@@ -1,0 +1,15 @@
+UsuarioFotoVirtual
+IF
+(
+     ISNOTBLANK([UsuarioFoto])
+     ,[UsuarioFoto]
+     ,"/appsheet/data/UBI-3461069/Recursos/FotoUsuario.png"  
+)
+
+UsuarioID
+LOWER(LEFT([UsuarioNombre], 1) & INDEX(SPLIT([UsuarioNombre], " "), 2))
+
+
+ContraseñaVirtual
+IF([UsuarioVer]=TRUE,[UsuarioContraseña], "********")
+

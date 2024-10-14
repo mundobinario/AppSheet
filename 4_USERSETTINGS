@@ -1,0 +1,118 @@
+ACTIONEntrada
+AND
+(
+  COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY()
+        ,[EventoID] = "Entrada"
+        ,[UsuarioID] = USERSETTINGS("Usuario")
+      )
+    )
+  ) = 0
+  ,COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY()
+        ,[EventoID].[Categoria] = "Licencia"
+        ,[UsuarioID] = USERSETTINGS("Usuario")
+      )
+    )
+  ) = 0
+)
+
+ACTIONSalida 
+AND
+(
+COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY(),
+        [EventoID] = "Salida",
+        USERSETTINGS("Usuario") = [UsuarioID]
+      )
+    )
+  ) = 0
+  ,
+  COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY(),
+        [EventoID] = "Entrada",
+        USERSETTINGS("Usuario") = [UsuarioID]
+      )
+    )
+  ) = 1
+)
+
+
+ACTIONActividades
+TARGET LINKTOFORM("FORMActividad","AsistenciaID", UNIQUEID())
+FORMULA
+AND
+(
+COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY(),
+        [EventoID] = "Salida",
+        USERSETTINGS("Usuario") = [UsuarioID]
+      )
+    )
+  ) = 0
+  ,
+  COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY(),
+        [EventoID] = "Entrada",
+        USERSETTINGS("Usuario") = [UsuarioID]
+      )
+    )
+  ) = 1
+)
+
+ACTIONLicencia
+TARGET LINKTOFORM("FORMLicencia","AsistenciaID", UNIQUEID())
+FORMULA
+AND
+(
+COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY()
+        ,[EventoID].[Categoria] = "Licencia"
+        ,[UsuarioID] = USERSETTINGS("Usuario")
+      )
+    )
+  ) = 0
+,
+COUNT(
+    SELECT(
+      Asistencias[AsistenciaID], 
+      AND(
+        DATE([AsistenciaFecha]) = TODAY()
+        ,[EventoID] = "Entrada"
+        ,[UsuarioID] = USERSETTINGS("Usuario")
+      )
+    )
+  ) = 0
+)
+
+Asistencias
+EventoID
+VALID IF
+SWITCH
+(
+    CONTEXT("View")
+    ,"FORMActividad", SELECT(Eventos[EventoID],[Categoria]="Productividad")
+    ,"FORMLicencia", SELECT(Eventos[EventoID],[Categoria]="Licencia")
+    ,SELECT(Eventos[EventoID],TRUE)
+)

@@ -1,0 +1,65 @@
+Contraseña
+VALID IF
+AND
+(
+     LOOKUP([Usuario], "Usuarios", "UsuarioID", "UsuarioContraseña") = [_THIS]
+     ,LOOKUP([Usuario], "Usuarios", "UsuarioID", "UsuarioStatus") = TRUE
+)
+
+Nombre
+FORMULA
+LOOKUP([Usuario], "Usuarios", "UsuarioID", "UsuarioNombre")
+
+Perfil
+FORMULA
+LOOKUP([Usuario], "Usuarios", "UsuarioID", "UsuarioPerfil")
+
+
+Status
+FORMULA
+LOOKUP([Usuario], "Usuarios", "UsuarioID", "UsuarioStatus")
+
+Show if en vistas
+AND
+(
+       USERSETTINGS("Status") = TRUE
+       ,IN
+       (
+            USERSETTINGS("Perfil")
+            ,{'Administrador', 'Supervisor', 'Colaborador'}
+      )
+)
+
+Settings
+Display Name
+IF
+( 
+    AND
+    (
+        ISNOTBLANK(USERSETTINGS("Usuario"))
+        ,ISNOTBLANK( USERSETTINGS("Contraseña"))
+    )
+    ,"Cerrar Sesión" & " " & USERSETTINGS("Nombre")
+    ,"Iniciar sesión"
+)
+
+Localization
+SAVE
+SWITCH
+(
+    CONTEXT("View")
+    ,"Settings", "Iniciar sesión"
+    ,"Guardar"
+)
+
+CANCEL
+IF(CONTEXT("View") = "Settings", "", "Cancelar")
+
+
+ACTIONVerContraseña
+IF ([UsuarioVer] = TRUE, FALSE, TRUE)
+[UsuarioVer] = FALSE
+
+ACTIONOcultarContraseña
+IF ([UsuarioVer] = TRUE, FALSE, TRUE)
+[UsuarioVer] = TRUE

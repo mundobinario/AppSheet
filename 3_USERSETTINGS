@@ -1,0 +1,21 @@
+ACTIONIniciarSesion
+LINKTOVIEW("Settings")
+
+PrincipalHoraActualVirtual
+HOUR(TIMENOW() - "00:00:00")
+
+PrincipalSaludoVirtual
+CONCATENATE(
+"¡Hola ", USERSETTINGS("Nombre"), "! ",
+IF
+(
+   AND([PrincipalHoraActualVirtual] >= 1, [PrincipalHoraActualVirtual] < 12)
+   ,'Buenos días'
+   ,IF
+   (
+       AND([PrincipalHoraActualVirtual] >= 12, [PrincipalHoraActualVirtual] < 19)
+       ,'Buenas tardes'
+       ,'Buenas noches'
+   )
+)
+)
