@@ -1,0 +1,88 @@
+ACTIONAsignar
+[GradoAsignacion]+1
+
+MateriasActivasCountVirtual
+COUNT(
+SELECT
+(
+   Materias[MateriaID]
+   ,AND
+   (
+       [MateriaStatus] = TRUE
+       ,[_THISROW].[GradoID]=[GradoID]
+   )
+))
+
+MateriasActivasVirtual
+SELECT
+(
+   Materias[MateriaID]
+   ,AND
+   (
+       [MateriaStatus] = TRUE
+       ,[_THISROW].[GradoID]=[GradoID]
+   )
+)
+
+agregar_alumno
+MateriaID
+ANY
+(
+  SELECT
+  (
+    Materias[MateriaID]
+    ,AND
+    (
+         [_THISROW].[GradoID] = [GradoID]
+         ,[MateriaStatus] = TRUE
+         ,NOT(
+            IN
+            (
+              [MateriaID]
+              ,SELECT(
+                  AlumnoMaterias[MateriaID]
+                  ,AND
+                  (
+                      [GradoID] =[_THISROW].[GradoID]
+                      ,[AlumnoID] = [_THISROW].[AlumnoID]
+                  )                  
+              )
+            )
+         )
+    )
+  )
+)
+
+
+Behavior
+COUNT
+(
+     SELECT
+     (
+        AlumnoMaterias[MateriaID]
+        ,AND
+        (
+           [GradoID] = [_THISROW].[GradoID]
+           ,[AlumnoID] = [_THISROW].[AlumnoID]
+        )
+     )
+) < [GradoID].[MateriasActivasCountVirtual]
+
+
+BOT
+Condition
+[_THISROW_BEFORE].[GradoAsignacion]<>[_THISROW_AFTER].[GradoAsignacion]
+
+STEPEliminarAsignacion
+SELECT
+(
+    AlumnoMaterias[CargaID]
+    ,[_THISROW].[GradoID] = [GradoID]
+)
+
+STEPAsignacionMaterias
+SELECT
+(
+    Alumnos[AlumnoID]
+    ,[GradoID]=[_THISROW].[GradoID]
+)
