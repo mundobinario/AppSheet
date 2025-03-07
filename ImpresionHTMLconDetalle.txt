@@ -1,0 +1,207 @@
+ACTIONImprimirHTML
+"https://script.google.com/macros/s/AKfycbyChpOmjvZQKaqCpAWpS0XsaaLQZBfUK7HPVmAsH3bkhMWjUOQa0VrAN5J2Ia9j8WGl/exec" 
+& "?ventaID=" & encodeurl([VentaID]) 
+& "&ventaFolio=Folio:" & encodeurl([VentaFolio]) 
+& "&ventaFecha=Fecha:" & encodeurl([VentaFecha])
+& "&cliente=Cliente:" & encodeurl([ClienteID].[ClienteNombre])
+
+
+Código.gs
+function doGet(e) {
+  var ss = SpreadsheetApp.openById('11ryrUe9Bq08c_fcoAHyH3oe2axN4OWLunPuXZ6ORCMU'); // ID de Google Sheets
+  var ventasDetalleSheet = ss.getSheetByName('VentasDetalle');
+  var productosSheet = ss.getSheetByName('Productos'); // Hoja de productos
+  var productos = [];
+  
+  htmltemplate = HtmlService.createTemplateFromFile('Ticket');
+
+  var ventaID = e.parameter.ventaID || '';
+  var ventaFolio = e.parameter.ventaFolio || '';
+  var ventaFecha = e.parameter.ventaFecha || '';
+  var cliente = e.parameter.cliente || '';
+
+  // Obtener datos de la hoja Productos para crear un diccionario { código: nombre }
+  var productosData = productosSheet.getDataRange().getValues();
+  var productosDict = {}; // Diccionario para almacenar código -> nombre
+
+  for (var i = 1; i < productosData.length; i++) {
+    var codigoProducto = productosData[i][0]; // Código del producto (columna A)
+    var nombreProducto = productosData[i][1]; // Nombre del producto (columna B)
+    productosDict[codigoProducto] = nombreProducto; // Guardar en el diccionario
+  }
+
+  if (ventaID) {  // Buscar los productos en la hoja 'VentasDetalle'
+    var detalleData = ventasDetalleSheet.getDataRange().getValues();
+    for (var j = 1; j < detalleData.length; j++) {
+      if (detalleData[j][1] == ventaID) { 
+        var codigo = detalleData[j][2]; // Código del producto en VentasDetalle (columna C)
+        var nombreProducto = productosDict[codigo] || "Producto no encontrado"; // Buscar nombre en diccionario
+        
+        productos.push({
+          producto: nombreProducto, 
+          cantidad: detalleData[j][3], 
+          precio: detalleData[j][4], 
+          total: detalleData[j][5] 
+        });
+      }  
+    }
+  }
+
+  htmltemplate.ventaID = ventaID;
+  htmltemplate.ventaFolio = ventaFolio;
+  htmltemplate.ventaFecha = ventaFecha;
+  htmltemplate.cliente = cliente;
+  htmltemplate.productos = productos;
+ 
+  return htmltemplate.evaluate();
+}
+
+
+Ticket.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 80px;
+            width: 280px;
+            margin: 10px;
+            padding: 0;
+            border: 0px solid #000;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            width: 400px; /* Ajusta el ancho según sea necesario */
+            margin: 10px 10px;
+            font-family: Arial, sans-serif;
+        }
+        .logo {
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
+        .logo img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        .text {
+            flex: 1 1 auto;
+        }
+        .text p {
+            margin: 0;
+        }
+        .text strong {
+            font-size: 1.2em;
+        }
+        .header p {
+            margin: 0;
+        .title {
+            background-color: #009FE3;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 3px;
+            font-weight: bold;
+            margin: 2mm 0;
+            text-align: center;
+            
+        }
+        .header span, .comments span, .signature span {
+            display: block;
+            font-weight: bold;
+        }
+        .footer p {
+            font-size: 12px;
+            text-align: center;
+            margin: 0px 0;
+        }
+        .footer a {
+            color: #0000EE;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body> 
+        <div class="container">
+        <div class="text">
+            <p><strong>MB Store 3</strong></p>
+            <p>aprende, aplica y replica.</p>
+            <p>www.mundobinario.com.mx</p>
+            <p>México</p>
+        </div>
+        </div>
+        </br>
+        <div style="background-color: #00a0f0;  padding: 5px;">
+        <div style="text-align: center; font-weight: bold;">TICKET DE VENTA</div>
+        </div>
+        <p style="text-align: right;" id=ventaFecha></p>
+        <div class="header">
+            <p id=ventaID></p>
+            <p id=ventaFolio></p>
+            <p id=cliente></p>
+        <div class="header">
+        </br>
+        <div class="details">
+          <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cant.</th>
+                <th>Precio</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <? for (var i = 0; i < productos.length; i++) { ?>
+            <tr>
+                <td><?= productos[i].producto ?></td>
+                <td><?= productos[i].cantidad ?></td>
+                <td><?= productos[i].precio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' }) ?></td>
+                <td><?= productos[i].total.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' }) ?></td>
+            </tr>
+            <? } ?>
+        </tbody>
+    </table>
+        <div class="details">
+        <div class="footer">
+            </br>
+            <p>Conoce nuestro aviso de privacidad en</p>
+            <p><a href="http://www.mundobinario.com.mx">www.mundobinario.com.mx</a> si tienes alguna duda o sugerencia por favor escribe a <a href="mailto:hola@mundobinario.com.mx">hola@mundobinario.com.mx</a></p>
+            </br>
+            </br>
+            <p style="text-align: center;">APRENDE, APLICA, REPLICA.</p>
+        </div>      
+
+    <script>
+      document.getElementById("ventaID").innerHTML="<?= ventaID ?>";
+      document.getElementById("ventaFolio").innerHTML="<?= ventaFolio ?>";
+      document.getElementById("ventaFecha").innerHTML="<?= ventaFecha ?>";
+      document.getElementById("cliente").innerHTML="<?= cliente ?>";
+      document.getElementById("productos").innerHTML="<?= productos ?>";
+    </script>
+
+    <script>
+      window.onload = function(){
+        window.print();
+      }
+    </script>
+
+</body>
+</html>
+
