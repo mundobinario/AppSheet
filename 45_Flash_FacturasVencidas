@@ -1,0 +1,14 @@
+FacturaDiasRestantes 
+TOTALHOURS([FacturaFechaPagoVirtual] - TODAY())/24
+
+FacturaFechaPagoVirtual
+[FacturaFecha] + [FacturaCredito]
+
+Calcular Minutos transcurridos
+MINUTE(NOW()-[FacturaTimestamp])
+
+Calcular Horas Transcurridas
+TOTALHOURS(NOW()-[FacturaTimestamp])
+
+FacturaLeyendaPagoVirtual
+CONCATENATE("La fecha de pago deberá ser: ", DAY([FacturaFechaPagoVirtual]), "/", MONTH([FacturaFechaPagoVirtual]), "/", YEAR([FacturaFechaPagoVirtual]))
