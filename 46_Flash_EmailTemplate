@@ -1,0 +1,23 @@
+FacturasPorVencerVirtual
+SELECT(
+  SLICEFacturasPendientes[FacturaID]
+  ,[_THISROW].[AgenteID]=[AgenteID]
+)
+
+
+
+
+EVENTFacturasPorVencer
+Filter Condition
+COUNT([FacturasPorVencerVirtual])>0
+
+
+
+TEMPLATE
+Hola <<[AgenteNombre]>> tienes <<COUNT([FacturasPorVencerVirtual])>> factura(s) por vencer
+
+<<Start: [FacturasPorVencerVirtual][FacturaID]>><<[FacturaNo]>>
+<<[FacturaMonto]>>
+<<[FacturaFechaPagoVirtual]>>
+<<[FacturaDiasRestantes]>><<End>>
+
