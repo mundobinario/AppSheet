@@ -1,0 +1,24 @@
+BOTFacturasMasivas
+
+Condition
+[FacturaComentarios]="Carga masiva"
+
+
+ProveedorID
+LOOKUP([_THISROW].[ProveedorID], "Proveedores", "ProveedorNombre", "ProveedorID")
+
+
+FacturaCredito
+IF
+(
+  ISBLANK([FacturaCredito])
+  ,LOOKUP([ProveedorID], "Proveedores", "ProveedorID", "ProveedorCredito")
+  ,[FacturaCredito]
+)
+
+
+AgenteID
+LOOKUP([_THISROW].[AgenteID], "Agentes", "AgenteNombre", "AgenteID")
+
+Required
+CONTEXT("View")="Facturas
