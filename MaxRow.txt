@@ -1,0 +1,27 @@
+UltimoID OP1
+MAXROW
+(
+    "DocumentosGenerador"
+    ,"Hora"
+    ,AND
+    (
+      [_THISROW].[OrdenID] = [OrdenID]
+      ,[DocuementoID].[DocumentoTipo] = [_THISROW].[DocuementoID].[DocumentoTipo] 
+    )
+)
+
+
+UltimoID OP2
+INDEX(
+  ORDERBY(
+    FILTER(
+      "DocumentosGenerador",
+      AND([_THISROW].[OrdenID] = [OrdenID], [DocuementoID].[DocumentoTipo] = [_THISROW].[DocuementoID].[DocumentoTipo] )
+    ),
+    [Folio], TRUE
+  ),
+  1
+)
+
+Initial Value
+[UltimoID].[Color]
