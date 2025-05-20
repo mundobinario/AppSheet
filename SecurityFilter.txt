@@ -1,0 +1,1 @@
+LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID") = [_THISROW].[UsuarioID]
