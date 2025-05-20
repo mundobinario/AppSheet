@@ -1,0 +1,19 @@
+FechaFin
+[FechaFin]>=[FechaInicio]
+"La fecha fin debe ser mayor o igual a fecha inicio"
+
+UsuarioFechaNacimiento
+IF(
+  ISNOTBLANK([UsuarioFechaNacimiento])
+  ,[UsuarioEdadVirtual]>=18
+  ,TRUE
+)
+"El empleado debe ser mayor de edad (18años para México)"
+
+UsuarioEdadVirtual
+IF
+(
+   ISNOTBLANK([UsuarioFechaNacimiento])
+   ,((TOTALHOURS(TODAY() - [UsuarioFechaNacimiento]))/24)/365
+   ,0
+)
