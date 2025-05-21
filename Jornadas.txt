@@ -1,0 +1,111 @@
+Salida
+Accesos
+Data: Set the values of some columns in this row
+AccesoSalida = NOW()
+
+
+ACTIONEntrada
+Add a new row...
+UsuarioID = LOOKUP(USEREMAIL(),"Usuarios", "UsuarioCorreo", "UsuarioID")
+AccesoFecha = TODAY()
+AccesoEntrada = NOW()
+
+ONLY IF THIS CONDITION IS TRUE
+COUNT(
+    SELECT(
+      Accesos[AccesoID], 
+      AND(
+        DATE([AccesoFecha]) = TODAY()
+        ,[UsuarioID] = LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID")
+        ,ISNOTBLANK([AccesoEntrada]) 
+      )
+    )
+  ) = 0
+
+
+ReferencedRows para todas las demas acciones
+SELECT
+(
+  Accesos[AccesoID],
+  AND(
+    [UsuarioID] = LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID")
+    ,[AccesoFecha] = TODAY()
+  )
+)
+
+DESCANSO1
+ONLY IF THIS CONDITION IS TRUE
+COUNT(
+    SELECT(
+      Accesos[AccesoID], 
+      AND(
+        DATE([AccesoFecha]) = TODAY()
+        ,LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID") = [UsuarioID]
+        ,ISNOTBLANK([AccesoEntrada])
+        ,ISBLANK([AccesoDescanso1])
+        ,ISBLANK([AccesoSalida])
+      )
+    )
+  ) = 1
+
+ENTRADA2
+COUNT(
+    SELECT(
+      Accesos[AccesoID], 
+      AND(
+        DATE([AccesoFecha]) = TODAY()
+        ,LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID") = [UsuarioID]
+        ,ISNOTBLANK([AccesoDescanso1])
+        ,ISBLANK([AccesoEntrada2])
+        ,ISBLANK([AccesoSalida])
+      )
+    )
+  ) = 1
+
+
+DESCANSO2
+COUNT(
+    SELECT(
+      Accesos[AccesoID], 
+      AND(
+        DATE([AccesoFecha]) = TODAY()
+        ,LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID") = [UsuarioID]
+        ,ISNOTBLANK([AccesoEntrada2])
+        ,ISBLANK([AccesoDescanso2])
+        ,ISBLANK([AccesoSalida])
+      )
+    )
+  ) = 1
+
+ENTRADA3
+COUNT(
+    SELECT(
+      Accesos[AccesoID], 
+      AND(
+        DATE([AccesoFecha]) = TODAY()
+        ,LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID") = [UsuarioID]
+        ,ISNOTBLANK([AccesoDescanso2])
+        ,ISBLANK([AccesoEntrada3])
+        ,ISBLANK([AccesoSalida])
+      )
+    )
+  ) = 1
+
+
+SALIDA
+COUNT(
+    SELECT(
+      Accesos[AccesoID], 
+      AND(
+        DATE([AccesoFecha]) = TODAY(),
+        ISNOTBLANK([AccesoEntrada]),
+        ISBLANK([AccesoSalida]),        
+        [UsuarioID] = LOOKUP(USEREMAIL(), "Usuarios", "UsuarioCorreo", "UsuarioID")
+      )
+    )
+) = 1
+
+
+
+
+
