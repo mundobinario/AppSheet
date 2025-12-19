@@ -1,0 +1,71 @@
+VentaDetallePosicion en Initial Value
+MAX
+(
+     SELECT
+     (
+         VentasDetalle[VentaDetallePosicion]
+         ,AND   
+         (
+            [VentaID] = [_THISROW].[VentaID]
+            ,TRUE
+         )         
+     )
+) + 1
+
+AumentarPosicion
+[VentaDetallePosicion] + 1
+
+ReducirPosicion
+[VentaDetallePosicion] - 1
+
+EmpujarAbajo en Referenced Rows
+SELECT(
+  VentasDetalle[VentaDetalleID],
+  AND(
+    [VentaID] = [_THISROW].[VentaID],
+    [VentaDetallePosicion] = [_THISROW].[VentaDetallePosicion] - 1
+  )
+)
+
+Condition
+[VentaDetallePosicion]>1
+
+
+EmpujarArriba en Referenced Rows
+SELECT(
+  VentasDetalle[VentaDetalleID],
+  AND(
+    [VentaID] = [_THISROW].[VentaID],
+    [VentaDetallePosicion] = [_THISROW].[VentaDetallePosicion] + 1
+  )
+)
+
+Condition
+[VentaDetallePosicion] < MAX(
+  SELECT(
+    VentasDetalle[VentaDetallePosicion],
+    AND(
+      [VentaID] = [_THISROW].[VentaID],
+      TRUE
+    )
+  )
+)
+
+Bajar en Condition
+[VentaDetallePosicion] < MAX(
+  SELECT(
+    VentasDetalle[VentaDetallePosicion],
+    AND(
+      [VentaID] = [_THISROW].[VentaID],
+      TRUE
+    )
+  )
+)
+
+Subir en Condition
+[VentaDetallePosicion] > 1
+
+
+
+
+
