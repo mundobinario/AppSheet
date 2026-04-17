@@ -1,0 +1,49 @@
+FacturaIDExistente
+FORMULA
+TEXT
+(
+  ANY
+  (
+     SELECT
+     (
+        Facturas[FacturaID]
+        ,AND
+        (
+           [_THISROW].[FacturaNo] = [FacturaNo]
+           ,[_THISROW].[ProveedorID] = [ProveedorID]
+        )
+     )
+  )  
+)
+
+
+
+FacturaExistente
+FORMULA
+""
+SHOW
+URL
+IF
+(
+  ISNOTBLANK([FacturaIDExistente])
+  ,HYPERLINK
+  (
+    TEXT
+    (
+        LINKTOROW
+        (
+           [FacturaIDExistente]
+           , "Facturas_Detail"
+        )
+    )
+    ,"⚠️ Factura existente. Toca aquí para abrirla."
+  )
+  ,""
+)
+
+
+
+FacturaNo
+VALID IF
+ISBLANK([FacturaIDExistente])
+
