@@ -1,0 +1,44 @@
+RentaSalida
+EquipoID
+SELECT
+(
+   Equipos[EquipoID]
+   ,NOT
+   (
+     IN
+     (
+        [EquipoID]
+        ,SELECT
+        (
+           RentaSalida[EquipoID]
+           ,[_THISROW].[RentaID]=[RentaID]
+        )
+     )     
+   )
+)
+
+
+
+RentaEntrada
+EquipoID
+SELECT
+(
+    RentaSalida[EquipoID]
+    ,AND
+    (
+      [RentaID]= [_THISROW].[RentaID]
+      ,NOT
+      (
+        IN
+        (
+           [EquipoID]
+           ,SELECT
+           (
+               RentaEntrada[EquipoID]
+               ,[RentaID]= [_THISROW].[RentaID]
+           ) 
+        )
+      )
+    )
+)
+
