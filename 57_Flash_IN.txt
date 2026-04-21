@@ -17,6 +17,13 @@ SELECT
    )
 )
 
+TecnicoID
+SELECT
+(
+   Tecnico[TecnicoID]
+   ,IN([TecnicoPuesto], { "Supervisor", "Tecnico" })
+)
+
 
 
 RentaEntrada
@@ -41,4 +48,9 @@ SELECT
       )
     )
 )
+
+Tecnico
+Show if
+IN(LOOKUP(USEREMAIL(), "Tecnico", "TecnicoCorreo", "TecnicoPuesto"), {"Supervisor" })
+
 
