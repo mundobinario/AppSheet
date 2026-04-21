@@ -1,0 +1,28 @@
+AutorizacionStatus 
+IF
+(
+   [DocumentoTipoID].[DocumentoRequiereAutorizacion]=FALSE
+   ,"Aprobado"
+   ,"En validación"
+)
+
+
+
+Open File (Documento)
+OR
+(
+    AND
+    (
+      NOT(ISBLANK([Documento]))
+      ,[AutorizacionStatus]="Aprobado"
+    )
+    ,LOOKUP(USEREMAIL(), "Tecnico", "TecnicoCorreo", "TecnicoPuesto") = "Supervisor"
+)
+
+
+Autorizar documento
+AND
+(
+  NOT(IN([AutorizacionStatus], {"Aprobado"}))
+  ,LOOKUP(USEREMAIL(), "Tecnico", "TecnicoCorreo", "TecnicoPuesto")="Supervisor"
+)
