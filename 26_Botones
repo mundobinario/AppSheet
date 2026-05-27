@@ -1,0 +1,53 @@
+FORMATORutaCreada
+IN([RutaStatus], {"CREADA", "PROGRAMADA","EN RUTA", "COMPLETADA"})
+#666666
+
+FORMATORutaProgramada
+IN([RutaStatus], {"PROGRAMADA","EN RUTA", "COMPLETADA"})
+#666666
+
+FORMATORutaEnRuta
+IN([RutaStatus], {"EN RUTA", "COMPLETADA"})
+IN([RutaStatus], {"PROGRAMADA","EN RUTA", "COMPLETADA"})
+#666666
+
+FORMATORutaCompletada
+IN([RutaStatus], {"COMPLETADA"})
+#666666
+
+RutaCreada
+IF
+(
+   [RutaStatus]="CREADA"
+   ,"CREADA"
+   ,[RutaStatus]
+)
+
+RutaProgramada
+IF
+(
+   [_THISROW_BEFORE].[RutaStatus]="CREADA"
+   ,"PROGRAMADA"
+   ,[RutaStatus]
+)
+
+RutaEnRuta
+IF
+(
+   [_THISROW_BEFORE].[RutaStatus]="PROGRAMADA"
+   ,"EN RUTA"
+   ,[RutaStatus]
+)
+
+RutaCompletada
+IF
+(
+   [_THISROW_BEFORE].[RutaStatus]="EN RUTA"
+   ,"COMPLETADA"
+   ,[RutaStatus]
+)
+
+
+
+"COMPLETADA"
+[RutaStatus]="EN RUTA"
