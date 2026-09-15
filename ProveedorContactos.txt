@@ -1,0 +1,36 @@
+ProveedorID 
+INITIALVALUE
+LOOKUP([_THISROW].[ContactoID], "Facturas", "ContactoID", "ProveedorID")
+
+ContactoID 
+VALIDIF
+SELECT
+(
+    ProveedorContactos[ContactoID]
+    ,[_THISROW].[ProveedorID]=[ProveedorID]
+)
+
+
+
+ContactoVirtual
+IF(
+  ISNOTBLANK([ContactoID].[ContactoTelefono]),
+  "📞 " & [ContactoID].[ContactoTelefono],
+  ""
+)
+&
+IF(
+  AND(
+    ISNOTBLANK([ContactoID].[ContactoTelefono]),
+    ISNOTBLANK([ContactoID].[ContactoCorreo])
+  ),
+  "
+",
+  ""
+)
+&
+IF(
+  ISNOTBLANK([ContactoID].[ContactoCorreo]),
+  "📧 " & [ContactoID].[ContactoCorreo],
+  ""
+)
